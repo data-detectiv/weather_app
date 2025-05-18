@@ -41,6 +41,4 @@ export default class CurrentLocation {
     toggleUnit() {
         this._unit = this._unit === "imperial" ? "metric" : "imperial";
     }
-
-
 }
