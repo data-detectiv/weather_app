@@ -1,3 +1,10 @@
+export const setPlaceholderText = () => {
+    const input = document.getElementById("searchBar__text");
+    window.innerWidth < 400 
+    ? (input.placeholder = "City, State, Country") 
+    : (input.placeholder = "City, State, Country, or Zip Code");
+};
+
 export const addSpinner = (element) => {
     animateButton(element);
     setTimeout(animateButton, 1000, element);
@@ -21,9 +28,10 @@ export const displayApiError = (statusCode) => {
 };
 
 const toProperCase = (text) => {
-    const words = text.split(" ");
+    if (typeof text !== "string") return "";
+    const words = text.split(/\s+/);
     const properWords = words.map(word => {
-        return word.charAt(0).toUpperCase() + word.slice(1);
+        return word.charAt(0).toUpperCase() + word.slice(1).toLowerCase();
     });
     return properWords.join(" ");
 }

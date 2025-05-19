@@ -1,13 +1,16 @@
 import CurrentLocation from "./CurrentLocation.js";
 import { 
+    setPlaceholderText,
     addSpinner, 
     displayErr, 
     updateScreenReaderConfirmation,
-    displayApiError 
+    displayApiError
 } from "./domFunctions.js";
 import { 
     setLocationObj, 
-    getHomeLocation, 
+    getHomeLocation,
+    getWeatherFromCoords,
+    getCoordsFromApi, 
     cleanText 
 } from "./dataFunctions.js";
 const currentLoc = new CurrentLocation();
@@ -41,7 +44,6 @@ document.addEventListener("DOMContentLoaded", initApp);
 const getGeoWeather = (event) => {
     if (event) {
         if (event.type === "click") {
-            // add spinner
             const mapIcon = document.querySelector(".fa-map-marker-alt");
             addSpinner(mapIcon);
 
@@ -135,20 +137,27 @@ const submitNewLocation = async (event) => {
     const locationIcon = document.querySelector(".fa-search");
     addSpinner(locationIcon);
     const coordsData = await getCoordsFromApi(entryText, currentLoc.getUnit());
-    if (coordsData.code == 200) {
-        // work with api data
-        // success
-        const myCoordsObj = {};
-        setLocationObj(currentLoc, myCoordsObj);
-        updateDataAndDisplay(currentLoc);
+    if (coordsData) {
+        if (coordsData.cod === 200) {
+            const myCoordsObj = {
+                lat: coordsData.coord.lat,
+                lon: coordsData.coord.lon,
+                name: coordsData.sys.country ? `${coordsData.name}, ${coordsData.sys.country}` : coordsData.name
+            };
+            setLocationObj(currentLoc, myCoordsObj);
+            updateDataAndDisplay(currentLoc);
+        } else {
+            displayApiError(coordsData);
+        }
+
     } else {
-        displayApiError(coordsData);
+        displayErr("Connection Error", "Connection Error");
     }
 }
 
 
 const updateDataAndDisplay = async (locationObj) => {
-    console.log(locationObj);
-    // const weatherJson = await getWeatherFromCoords(locationObj);
+    const weatherJson = await getWeatherFromCoords(locationObj);
+    console.log(weatherJson);
     // if (weatherJson) updateDisplay(weatherJson, locationObj) ;
-}
+};
