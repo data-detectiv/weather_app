@@ -43,4 +43,29 @@ export const updateWeatherLocationHeader = (message) => {
 
 export const updateScreenReaderConfirmation = (message) => {
     document.getElementById("confirmation").textContent = message;
+};
+
+export const updateDisplay = (weatherJson, locationObj) => {
+    fadeDisplay();
+    clearDisplay();
+
+    fadeDisplay();
+};
+
+const fadeDisplay = () => {
+    const cc = document.getElementById("currentForecast");
+    cc.classList.toggle("zero-vis");
+    cc.classList.toggle("fade-in");
+
+    const sixDay = document.getElementById("dailyForecast");
+    sixDay.classList.toggle("zero-vis");
+    sixDay.classList.toggle("fade-in");
+};
+
+const clearDisplay = () => {
+    const currentConditions = document.getElementById("currentForecast__conditions");
+    deleteContent(currentConditions);
+
+    const sixDayForecast = document.getElementById("dailyForecast__contents");
+    deleteContent(sixDayForecast);
 }
